@@ -4,36 +4,23 @@ import { Globe2 } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { SubmitForm } from "@/components/submit-form";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { dictionaries, isLocale, sampleDreams, type Dream } from "@/lib/content";
-import { hasSupabaseEnv } from "@/lib/supabase";
+import { dictionaries, isLocale, type Dream } from "@/lib/content";
 import { relativeTime } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
 async function getDreams(): Promise<Dream[]> {
-  if (!hasSupabaseEnv()) return sampleDreams;
   try {
-    const { createClient } = await import("@supabase/supabase-js");
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-    const supabase = createClient(url, key);
-    const { data } = await supabase
-      .from("dreams")
-      .select("id,name,dream,reason,language,created_at")
-      .eq("status", "published")
-      .order("created_at", { ascending: false })
-      .limit(12);
-    if (!data) return sampleDreams;
-    return data.map((d) => ({
-      id: d.id,
-      name: d.name,
-      dream: d.dream,
-      reason: d.reason,
-      language: d.language as "id" | "en",
-      createdAt: d.created_at,
-    }));
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://before-die-app.vercel.app";
+    const res = await fetch(`${baseUrl}/api/dreams`, {
+      next: { revalidate: 0 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    if (!data.items?.length) return [];
+    return data.items;
   } catch {
-    return sampleDreams;
+    return [];
   }
 }
 
@@ -206,12 +193,7 @@ export default async function LocalePage({
           </div>
         </div>
 
-        {/* Not-configured warning */}
-        {dreams.length === 0 && (
-          <p className="mx-auto mt-8 max-w-xl rounded-2xl border border-amber-500/20 bg-amber-500/8 px-5 py-4 text-center text-sm text-amber-700 dark:text-amber-300">
-            {copy.notConfigured}
-          </p>
-        )}
+
       </section>
 
       {/* ── Footer ── */}
