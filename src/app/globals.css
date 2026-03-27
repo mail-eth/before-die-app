@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+/* ─── Light mode — warm cream cinematic ─── */
+:root {
+  --background: #faf6f0;
+  --foreground: #1c1917;
+  --muted-foreground: #78716c;
+  --card: rgba(255, 252, 247, 0.82);
+  --card-foreground: #1c1917;
+  --border: rgba(120, 100, 85, 0.13);
+  --accent: #c4866a;
+  --accent-soft: rgba(196, 134, 106, 0.12);
+  --input-bg: rgba(255, 252, 247, 0.9);
+  --ring: rgba(196, 134, 106, 0.35);
+  --destructive: #dc2626;
+}
+
+/* ─── Dark mode — deep warm noir ─── */
+.dark {
+  --background: #0f0d0c;
+  --foreground: #f0ebe4;
+  --muted-foreground: #9c8e85;
+  --card: rgba(28, 24, 21, 0.85);
+  --card-foreground: #f0ebe4;
+  --border: rgba(200, 185, 172, 0.09);
+  --accent: #d4956e;
+  --accent-soft: rgba(212, 149, 110, 0.1);
+  --input-bg: rgba(28, 24, 21, 0.9);
+  --ring: rgba(212, 149, 110, 0.3);
+  --destructive: #ef4444;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-input-bg: var(--input-bg);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  background-color: var(--background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Warm atmospheric background layers */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(212, 149, 110, 0.1), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 110%, rgba(100, 75, 100, 0.07), transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+/* Cinematic selection */
+::selection {
+  background: rgba(196, 134, 106, 0.22);
+  color: var(--foreground);
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 100, 85, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 100, 85, 0.35);
+}
+
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Smooth transitions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
