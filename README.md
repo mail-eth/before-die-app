@@ -6,9 +6,9 @@ Before Die is a bilingual emotional milestone wall built with Next.js + Supabase
 
 ## What is live now
 - `/id` and `/en` locale routes
-- light / dark theme toggle
-- public dream wall UI
-- submission form connected to Supabase
+- Light / dark theme toggle
+- Public dream wall UI
+- Submission form connected to Supabase
 - API route (`/api/dreams`) for create + feed
 
 ## Local development
@@ -20,16 +20,19 @@ npm run dev
 Open `http://localhost:3000`.
 
 ## Environment variables
-Copy `.env.example` to `.env.local` and fill in:
+Copy `.env.example` to `.env.local` and fill in real values:
 - `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` (client/public usage)
-- `SUPABASE_SERVICE_ROLE_KEY` (server-only API usage)
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
 - `NEXT_PUBLIC_SITE_URL`
+
+⚠️ Never commit real secret values to GitHub.
 
 ## Database setup
 Run SQL from `supabase-schema.sql` to create the `dreams` table and policies.
 
-## Notes
-- Keep `SUPABASE_SERVICE_ROLE_KEY` secret (never expose in client code).
-- If deployment env vars change, redeploy on Vercel so API routes use the latest values.
-- This project is intentionally iterative: shipping small improvements continuously.
+## Security notes
+- Keep `SUPABASE_SERVICE_ROLE_KEY` server-only.
+- If a secret is ever exposed, rotate it in Supabase and update Vercel env vars immediately.
+- Redeploy after env updates so API routes use the latest values.
+- Repo blocks accidental env commits via `.gitignore` and provides safe examples in `.env.example`.
