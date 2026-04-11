@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Globe2 } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
+import { MobileNav } from "@/components/mobile-nav";
 import { MusicPlayer } from "@/components/music-player";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { StoryCard } from "@/components/story-card";
@@ -89,6 +90,7 @@ export default async function StoriesPage({
           </nav>
         </div>
         <div className="flex items-center gap-3">
+          <MobileNav locale={locale} />
           <LanguageToggle locale={locale} />
           <ThemeToggle />
         </div>
