@@ -3,14 +3,58 @@ import { sampleDreams } from "@/lib/content";
 import { getSupabaseAdmin, hasSupabaseEnv } from "@/lib/supabase";
 import { dreamSchema, moderateSubmission } from "@/lib/validation";
 
+type Locale = "id" | "en";
+
+const messages = {
+  id: {
+    invalidInput: "Tolong cek ulang isian kamu lalu coba lagi.",
+    rejected: "Submission belum bisa dipublish sekarang.",
+    botDetected: "Bot terdeteksi.",
+    preview: "Mode preview: alur submit sudah siap, menunggu koneksi database.",
+    saveFailed: "Gagal menyimpan submission kamu.",
+    unexpected: "Terjadi error tak terduga.",
+    success: "Mimpimu sudah masuk.",
+  },
+  en: {
+    invalidInput: "Please review your submission and try again.",
+    rejected: "Your submission could not be published right now.",
+    botDetected: "Bot detected.",
+    preview: "Preview mode: your submission flow is ready, waiting for database connection.",
+    saveFailed: "Failed to save your submission.",
+    unexpected: "Unexpected error.",
+    success: "Your dream has been received.",
+  },
+} as const;
+
+function detectLanguage(input: unknown, request: Request): Locale {
+  if (typeof input === "object" && input !== null && "language" in input) {
+    const value = String((input as Record<string, unknown>).language ?? "").toLowerCase();
+    if (value === "id" || value === "en") {
+      return value;
+    }
+  }
+
+  const acceptLanguage = request.headers.get("accept-language")?.toLowerCase() ?? "";
+  return acceptLanguage.includes("id") ? "id" : "en";
+}
+
+function getMessages(locale: Locale) {
+  return messages[locale];
+}
+
 export async function POST(request: Request) {
+  let locale: Locale = detectLanguage(null, request);
+
   try {
     const json = await request.json();
+    locale = detectLanguage(json, request);
+    const copy = getMessages(locale);
+
     const parsed = dreamSchema.safeParse(json);
 
     if (!parsed.success) {
       return NextResponse.json(
-        { ok: false, status: "rejected", message: "Please review your submission and try again." },
+        { ok: false, status: "rejected", message: copy.invalidInput },
         { status: 400 },
       );
     }
@@ -18,11 +62,12 @@ export async function POST(request: Request) {
     const moderated = moderateSubmission(parsed.data);
 
     if (moderated.status !== "published") {
-      return NextResponse.json({ ok: false, status: moderated.status, message: moderated.message }, { status: 400 });
+      const message = moderated.message === "Bot detected." ? copy.botDetected : copy.rejected;
+      return NextResponse.json({ ok: false, status: moderated.status, message }, { status: 400 });
     }
 
     if (!hasSupabaseEnv()) {
-      return NextResponse.json({ ok: true, status: "published", message: "Preview mode: your submission flow is ready, waiting for database connection." });
+      return NextResponse.json({ ok: true, status: "published", message: copy.preview });
     }
 
     const supabase = getSupabaseAdmin();
@@ -36,12 +81,13 @@ export async function POST(request: Request) {
     });
 
     if (error) {
-      return NextResponse.json({ ok: false, status: "rejected", message: "Failed to save your submission." }, { status: 500 });
+      return NextResponse.json({ ok: false, status: "rejected", message: copy.saveFailed }, { status: 500 });
     }
 
-    return NextResponse.json({ ok: true, status: "published", message: "Your dream has been received." });
+    return NextResponse.json({ ok: true, status: "published", message: copy.success });
   } catch {
-    return NextResponse.json({ ok: false, status: "rejected", message: "Unexpected error." }, { status: 500 });
+    const copy = getMessages(locale);
+    return NextResponse.json({ ok: false, status: "rejected", message: copy.unexpected }, { status: 500 });
   }
 }
 
