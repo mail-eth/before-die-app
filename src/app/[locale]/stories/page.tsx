@@ -74,6 +74,14 @@ export default async function StoriesPage({
           >
             {copy.storiesNavLink}
           </span>
+          <div className="h-5 w-px bg-border" />
+          <Link
+            href={`/${locale}/agents`}
+            className="font-serif text-lg font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70"
+            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+          >
+            For Agents
+          </Link>
         </div>
         <div className="flex items-center gap-3">
           <LanguageToggle locale={locale} />

@@ -96,6 +96,12 @@ export default async function LocalePage({
             >
               {copy.storiesNavLink}
             </Link>
+            <Link
+              href={`/${locale}/agents`}
+              className={`rounded-full px-4 py-1.5 transition-all text-muted-foreground hover:text-foreground`}
+            >
+              For Agents
+            </Link>
           </nav>
         </div>
         <div className="flex items-center gap-3">
