@@ -13,7 +13,7 @@ export function MobileNav({ locale }: { locale: Locale }) {
     <div className="relative sm:hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border/50 bg-card/50 text-foreground/70 transition-all hover:bg-card/80 hover:text-foreground"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-background transition-all hover:scale-105"
         aria-label="Toggle menu"
       >
         {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}

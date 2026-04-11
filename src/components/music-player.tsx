@@ -35,8 +35,8 @@ export function MusicPlayer() {
       setEnabled(wasEnabled !== undefined ? wasEnabled : true);
       setVolume(savedVolume || 0.15);
     } else {
-      // Default on, low volume
-      setEnabled(true);
+      // Default OFF - user must opt-in to play music
+      setEnabled(false);
       setVolume(0.15);
     }
   }, []);

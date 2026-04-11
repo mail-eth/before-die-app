@@ -184,6 +184,9 @@ export default async function LocalePage({
             >
               {copy.wallTitle}
             </h2>
+            <p className="mt-2 text-xs text-muted-foreground/50">
+              {dreams.length} {locale === "id" ? "mimpi" : "dreams"} {locale === "id" ? "tercatat" : "recorded"}
+            </p>
           </div>
           <p className="max-w-md text-sm leading-7 text-muted-foreground">
             {copy.wallSubtitle}
