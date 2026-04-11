@@ -115,25 +115,25 @@ export default async function LocalePage({
       {/* ── Hero ── */}
       <section className="relative flex flex-col items-center justify-center px-6 pt-24 pb-20 text-center md:px-10 lg:px-14">
         {/* Eyebrow */}
-        <p className="mb-6 text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
+        <p className="hero-eyebrow mb-6 text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
           {copy.heroEyebrow}
         </p>
 
         {/* Main headline */}
         <h1
-          className="max-w-4xl text-5xl font-bold leading-[1.05] tracking-tight text-foreground md:text-7xl lg:text-8xl"
+          className="hero-heading max-w-4xl text-5xl font-bold leading-[1.05] tracking-tight text-foreground md:text-7xl lg:text-8xl"
           style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
         >
           {copy.heroTitle}
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
+        <p className="hero-subtitle mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
           {copy.heroSubtitle}
         </p>
 
         {/* CTA */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="hero-buttons mt-10 flex flex-wrap items-center justify-center gap-4">
           <a
             href="#share"
             className="inline-flex items-center rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/15"
@@ -149,9 +149,9 @@ export default async function LocalePage({
         </div>
 
         {/* Decorative divider */}
-        <div className="mt-20 flex items-center gap-3 opacity-30">
+        <div className="hero-divider mt-20 flex items-center gap-3 opacity-30">
           <div className="h-px w-12 bg-border" />
-          <div className="h-1 w-1 rounded-full bg-foreground/50" />
+          <div className="h-1 w-1 animate-pulse rounded-full bg-foreground/50" />
           <div className="h-px w-12 bg-border" />
         </div>
       </section>

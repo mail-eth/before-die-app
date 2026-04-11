@@ -115,3 +115,70 @@ main {
 * {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ─── Hero Entrance Animations ─── */
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes dividerPulse {
+  0%, 100% { opacity: 0.2; }
+  50%       { opacity: 0.45; }
+}
+
+@keyframes ambientShift {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+/* Hero elements */
+.hero-eyebrow {
+  animation: heroFadeIn 800ms ease-out both;
+  animation-delay: 0ms;
+}
+.hero-heading {
+  animation: heroFadeUp 800ms ease-out both;
+  animation-delay: 120ms;
+}
+.hero-subtitle {
+  animation: heroFadeUp 600ms ease-out both;
+  animation-delay: 240ms;
+}
+.hero-buttons {
+  animation: heroFadeUp 600ms ease-out both;
+  animation-delay: 400ms;
+}
+.hero-divider {
+  animation: heroFadeIn 600ms ease-out both;
+  animation-delay: 600ms;
+}
+
+/* Ambient background */
+@media (prefers-reduced-motion: no-motion) {
+  body::before {
+    animation: none;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
