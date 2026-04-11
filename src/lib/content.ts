@@ -38,7 +38,7 @@ export const dictionaries = {
     formPlaceholderDream: "Speak it into existence...",
     formPlaceholderReason: "Kenapa ini penting buat kamu?",
     footerLine:
-      "Kamu bebas ngomong apa. Kamu bebas jadi siapa. Before Die cuma想说 - ada yang lulus.",
+      "Mungkin kita tidak bisa pengendalian akhirnya. Tapi kita masih bisa memilih apa yang ingin kita perjuangkan sebelum sampai ke sana.",
     emptyTitle: "Belum ada submission publik.",
     emptyBody: "Jadi orang pertama yang menulis milestone di Before Die.",
     loadMore: "Muat lagi",

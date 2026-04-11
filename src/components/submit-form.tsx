@@ -122,7 +122,7 @@ export function SubmitForm({ locale, copy }: { locale: Locale; copy: Copy }) {
       {privacy === "emoji" && (
         <div className="mb-5 space-y-2">
           <label className="text-sm font-medium text-foreground/80">
-            Pilih emoji lo
+            Pilih emoji kamu
           </label>
           <input
             name="emoji"
