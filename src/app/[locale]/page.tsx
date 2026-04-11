@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Globe2 } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
+import { MusicPlayer } from "@/components/music-player";
 import { SubmitForm } from "@/components/submit-form";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { dictionaries, isLocale, type Dream } from "@/lib/content";
@@ -40,6 +41,8 @@ export default async function LocalePage({
 
   return (
     <main className="relative flex min-h-screen w-full flex-col">
+      <MusicPlayer />
+
       {/* ── Header ── */}
       <header className="sticky top-0 z-50 flex items-center justify-between gap-4 border-b border-border/50 bg-background/70 px-6 py-4 backdrop-blur-md md:px-10 lg:px-14">
         <Link
