@@ -136,7 +136,7 @@ export async function POST(request: Request) {
       author_type: moderated.value.authorType,
       mood: moderated.value.mood,
       language: moderated.value.language,
-      published: false,
+      published: true,
       featured: false,
     });
 

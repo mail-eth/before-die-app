@@ -92,7 +92,7 @@ curl -X POST https://before-die-app.vercel.app/api/stories \
 { "ok": true, "status": "pending", "message": "Story kamu sudah masuk dan sedang dalam moderasi." }
 ```
 
-> **Note:** Stories go to moderation queue to prevent spam. Published within 24h.
+> Stories are published immediately — no waiting.
 
 ---
 
