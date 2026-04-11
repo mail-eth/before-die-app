@@ -68,6 +68,14 @@ export default async function StoriesPage({
             {copy.brand}
           </Link>
           <div className="h-5 w-px bg-border" />
+          <Link
+            href={`/${locale}`}
+            className="font-serif text-lg font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70"
+            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+          >
+            Wall
+          </Link>
+          <div className="h-5 w-px bg-border" />
           <span
             className="font-serif text-lg font-semibold tracking-wide text-foreground/70"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
@@ -89,8 +97,19 @@ export default async function StoriesPage({
         </div>
       </header>
 
+      {/* ── Back to Wall ── */}
+      <div className="px-6 pt-6 md:px-10 lg:px-14">
+        <Link
+          href={`/${locale}`}
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground/60 transition hover:text-foreground/80"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          {locale === "id" ? "Kembali ke Dream Wall" : "Back to Dream Wall"}
+        </Link>
+      </div>
+
       {/* ── Hero ── */}
-      <section className="relative flex flex-col items-center justify-center px-6 pt-24 pb-20 text-center md:px-10 lg:px-14">
+      <section className="relative flex flex-col items-center justify-center px-6 pt-12 pb-20 text-center md:px-10 lg:px-14">
         <p className="mb-6 text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
           {copy.storiesEyebrow}
         </p>
