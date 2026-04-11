@@ -102,7 +102,7 @@ export function MusicPlayer() {
     return (
       <button
         onClick={toggleMusic}
-        className="fixed bottom-6 right-6 z-50 rounded-full bg-[#C4A882] p-3 text-white shadow-lg transition hover:bg-[#b39a72] hover:scale-105"
+        className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-[calc(1.5rem+env(safe-area-inset-right))] z-50 rounded-full bg-[#C4A882] p-3 text-white shadow-lg transition hover:bg-[#b39a72] hover:scale-105"
         title="Enable ambient music"
       >
         🎵
@@ -112,7 +112,7 @@ export function MusicPlayer() {
 
   return (
     <div
-      className="fixed bottom-6 right-6 z-50"
+      className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-[calc(1.5rem+env(safe-area-inset-right))] z-50"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
