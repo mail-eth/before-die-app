@@ -19,22 +19,35 @@ type Copy = {
   languageLabel: { id: string; en: string };
 };
 
+type PrivacyMode = "name" | "emoji" | "anonymous";
+
 export function SubmitForm({ locale, copy }: { locale: Locale; copy: Copy }) {
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [privacy, setPrivacy] = useState<PrivacyMode>("anonymous");
 
   async function onSubmit(formData: FormData) {
     setPending(true);
     setMessage(null);
     setStatus("idle");
 
+    // Build name based on privacy mode
+    let name = "";
+    if (privacy === "anonymous") {
+      name = "anonymous";
+    } else if (privacy === "emoji") {
+      name = formData.get("emoji") as string || "🙈";
+    } else {
+      name = formData.get("name") as string || "";
+    }
+
     const payload = {
-      name: String(formData.get("name") || ""),
-      dream: String(formData.get("dream") || ""),
-      reason: String(formData.get("reason") || ""),
-      language: String(formData.get("language") || locale),
-      website: String(formData.get("website") || ""),
+      name,
+      dream: formData.get("dream") as string || "",
+      reason: formData.get("reason") as string || "",
+      language: formData.get("language") as string || locale,
+      website: formData.get("website") as string || "",
     };
 
     try {
@@ -56,26 +69,73 @@ export function SubmitForm({ locale, copy }: { locale: Locale; copy: Copy }) {
 
   return (
     <form
-      action={onSubmit}
+      action={onSubmit as unknown as string}
       className="rounded-3xl border border-border/60 bg-card/80 p-8 shadow-[0_8px_40px_rgba(0,0,0,0.06)] backdrop-blur"
     >
-      {/* Name */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground/80">
-          {copy.formName}
+      {/* Privacy Selector */}
+      <div className="mb-6">
+        <label className="mb-2 block text-sm font-medium text-foreground/80">
+          🫣 {copy.formName}
         </label>
-        <input
-          name="name"
-          required
-          minLength={2}
-          maxLength={40}
-          placeholder={copy.formPlaceholderName}
-          className="w-full rounded-xl border border-border/70 bg-input-bg px-4 py-3 text-sm text-foreground placeholder-muted-foreground/60 outline-none transition focus:border-accent/60 focus:ring-2 focus:ring-ring/30"
-        />
+        <div className="flex gap-2">
+          {(["anonymous", "emoji", "name"] as PrivacyMode[]).map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              onClick={() => setPrivacy(mode)}
+              className={`rounded-full px-4 py-2 text-xs font-medium transition-all ${
+                privacy === mode
+                  ? mode === "anonymous"
+                    ? "bg-[#C4A882] text-white"
+                    : mode === "emoji"
+                    ? "bg-[#8FAF9A] text-white"
+                    : "bg-foreground text-background"
+                  : "bg-card border border-border/60 text-muted-foreground hover:border-border"
+              }`}
+            >
+              {mode === "anonymous" && "🔒 Anonymous"}
+              {mode === "emoji" && "🙈 Emoji"}
+              {mode === "name" && "✏️ Name"}
+            </button>
+          ))}
+        </div>
       </div>
 
+      {/* Name field (only if "Name" selected) */}
+      {privacy === "name" && (
+        <div className="mb-5 space-y-2">
+          <label className="text-sm font-medium text-foreground/80">
+            {copy.formName}
+          </label>
+          <input
+            name="name"
+            required={privacy === "name"}
+            minLength={2}
+            maxLength={40}
+            placeholder={copy.formPlaceholderName}
+            className="w-full rounded-xl border border-border/70 bg-input-bg px-4 py-3 text-sm text-foreground placeholder-muted-foreground/60 outline-none transition focus:border-accent/60 focus:ring-2 focus:ring-ring/30"
+          />
+        </div>
+      )}
+
+      {/* Emoji field (only if "Emoji" selected) */}
+      {privacy === "emoji" && (
+        <div className="mb-5 space-y-2">
+          <label className="text-sm font-medium text-foreground/80">
+            Pilih emoji lo
+          </label>
+          <input
+            name="emoji"
+            required={privacy === "emoji"}
+            maxLength={10}
+            placeholder="🙈"
+            className="w-full rounded-xl border border-border/70 bg-input-bg px-4 py-3 text-2xl text-center outline-none transition focus:border-accent/60 focus:ring-2 focus:ring-ring/30"
+          />
+        </div>
+      )}
+
       {/* Dream */}
-      <div className="mt-5 space-y-2">
+      <div className="space-y-2">
         <label className="text-sm font-medium text-foreground/80">
           {copy.formDream}
         </label>
@@ -132,7 +192,7 @@ export function SubmitForm({ locale, copy }: { locale: Locale; copy: Copy }) {
 
       {/* Privacy note */}
       <p className="mt-5 text-xs leading-relaxed text-muted-foreground/60 italic">
-        {copy.formPublicNote}
+        🔒 {copy.formPublicNote}
       </p>
 
       {/* Submit */}
