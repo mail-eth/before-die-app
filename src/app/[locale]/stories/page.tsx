@@ -84,7 +84,7 @@ export default async function StoriesPage({
       {/* ── Hero ── */}
       <section className="relative flex flex-col items-center justify-center px-6 pt-24 pb-20 text-center md:px-10 lg:px-14">
         <p className="mb-6 text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
-          {locale === "id" ? "Cerita hidup" : "Life stories"}
+          {copy.storiesEyebrow}
         </p>
         <h1
           className="max-w-4xl text-5xl font-bold leading-[1.05] tracking-tight text-foreground md:text-7xl lg:text-8xl"

@@ -76,6 +76,7 @@ export const dictionaries = {
 
     // Stories section
     storiesTitle: "Stories",
+    storiesEyebrow: "Cerita hidup",
     storiesSubtitle: "Cerita-cerita yang mungkin bisa bikin kamu refletir.",
     storiesNavLink: "Stories",
     storiesEmptyTitle: "Belum ada story publik.",
@@ -133,6 +134,7 @@ export const dictionaries = {
 
     // Stories section
     storiesTitle: "Stories",
+    storiesEyebrow: "Life stories",
     storiesSubtitle: "Stories that might make you stop and think.",
     storiesNavLink: "Stories",
     storiesEmptyTitle: "No public stories yet.",
