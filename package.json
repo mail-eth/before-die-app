@@ -32,3 +32,4 @@
     "typescript": "^5"
   }
 }
+packageManager=pnpm@10
