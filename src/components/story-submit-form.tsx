@@ -8,6 +8,7 @@ type Copy = {
   formLanguage: string;
   formPublicNote: string;
   formSubmit: string;
+  storiesFormSubmit: string;
   formLoading: string;
   formSuccess: string;
   formError: string;
@@ -252,7 +253,7 @@ export function StorySubmitForm({
             {copy.formLoading}
           </span>
         ) : (
-          copy.formSubmit
+          copy.storiesFormSubmit
         )}
       </button>
 

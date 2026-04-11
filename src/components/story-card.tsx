@@ -86,7 +86,7 @@ export function StoryCard({ story, locale, dict }: Props) {
             onClick={() => setExpanded(!expanded)}
             className="mt-2 text-xs text-accent/70 hover:text-accent transition-colors"
           >
-            {expanded ? "Show less" : "Read more"}
+            {expanded ? "Tutup" : "Baca lagi →"}
           </button>
         )}
       </div>
