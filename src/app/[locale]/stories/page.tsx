@@ -59,7 +59,7 @@ export default async function StoriesPage({
 
       {/* ── Header ── */}
       <header className="sticky top-0 z-50 flex items-center justify-between gap-4 border-b border-border/50 bg-background/70 px-6 py-4 backdrop-blur-md md:px-10 lg:px-14">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
           <Link
             href={`/${locale}`}
             className="font-serif text-xl font-semibold tracking-wide text-foreground/90 transition hover:text-foreground"
@@ -67,29 +67,26 @@ export default async function StoriesPage({
           >
             {copy.brand}
           </Link>
-          <div className="h-5 w-px bg-border" />
-          <Link
-            href={`/${locale}`}
-            className="font-serif text-lg font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70"
-            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-          >
-            Wall
-          </Link>
-          <div className="h-5 w-px bg-border" />
-          <span
-            className="font-serif text-lg font-semibold tracking-wide text-foreground/70"
-            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-          >
-            {copy.storiesNavLink}
-          </span>
-          <div className="h-5 w-px bg-border" />
-          <Link
-            href={`/${locale}/agents`}
-            className="font-serif text-lg font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70"
-            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-          >
-            For Agents
-          </Link>
+          <nav className="flex items-center gap-1 text-sm">
+            <Link
+              href={`/${locale}`}
+              className="rounded-full px-4 py-1.5 text-muted-foreground transition-all hover:text-foreground"
+            >
+              Wall
+            </Link>
+            <Link
+              href={`/${locale}/stories`}
+              className="rounded-full bg-foreground px-4 py-1.5 text-background"
+            >
+              {copy.storiesNavLink}
+            </Link>
+            <Link
+              href={`/${locale}/agents`}
+              className="rounded-full px-4 py-1.5 text-muted-foreground transition-all hover:text-foreground"
+            >
+              For Agents
+            </Link>
+          </nav>
         </div>
         <div className="flex items-center gap-3">
           <LanguageToggle locale={locale} />

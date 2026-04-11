@@ -61,7 +61,7 @@ const messages = {
     navShare: "Share",
     navAgents: "For Agents",
     footerText: "Before we go — maximize what mattered.",
-    note: "Note: Stories go through moderation before published. Dreams are published directly.",
+    note: "Note: Stories are published directly. No moderation needed.",
   },
 };
 
