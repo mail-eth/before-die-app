@@ -24,7 +24,7 @@ export function MusicPlayer() {
   const [enabled, setEnabled] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(0);
-  const [volume, setVolume] = useState(0.15);
+  const [volume, setVolume] = useState(0.8);
   const [showControls, setShowControls] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -33,11 +33,11 @@ export function MusicPlayer() {
     if (saved) {
       const { enabled: wasEnabled, volume: savedVolume } = JSON.parse(saved);
       setEnabled(wasEnabled !== undefined ? wasEnabled : true);
-      setVolume(savedVolume || 0.15);
+      setVolume(savedVolume || 0.8);
     } else {
       // Default OFF - user must opt-in to play music
       setEnabled(false);
-      setVolume(0.15);
+      setVolume(0.8);
     }
   }, []);
 
@@ -56,7 +56,7 @@ export function MusicPlayer() {
     }
     localStorage.setItem(
       "quietwall-music",
-      JSON.stringify({ enabled: next, volume: 0.15 })
+      JSON.stringify({ enabled: next, volume: 0.8 })
     );
   };
 

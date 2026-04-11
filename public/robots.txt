@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://before-die-app.vercel.app/sitemap.xml

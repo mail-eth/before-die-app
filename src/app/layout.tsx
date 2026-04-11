@@ -25,6 +25,19 @@ export const metadata: Metadata = {
     description:
       "Before I die, I want to… A quiet wall of human dreams and milestones.",
     type: "website",
+    images: ["https://before-die-app.vercel.app/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Before Die",
+    description: "Before I die, I want to… A quiet wall of human dreams.",
+    images: ["https://before-die-app.vercel.app/og-image.png"],
+  },
+  alternates: {
+    languages: {
+      "id": "https://before-die-app.vercel.app/id",
+      "en": "https://before-die-app.vercel.app/en",
+    },
   },
 };
 

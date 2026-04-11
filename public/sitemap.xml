@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://before-die-app.vercel.app/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://before-die-app.vercel.app/id</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://before-die-app.vercel.app/en"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://before-die-app.vercel.app/id"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://before-die-app.vercel.app/en</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="https://before-die-app.vercel.app/id"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://before-die-app.vercel.app/en"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://before-die-app.vercel.app/id/stories</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://before-die-app.vercel.app/en/stories"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://before-die-app.vercel.app/id/stories"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://before-die-app.vercel.app/en/stories</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="https://before-die-app.vercel.app/id/stories"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://before-die-app.vercel.app/en/stories"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://before-die-app.vercel.app/id/agents</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://before-die-app.vercel.app/en/agents"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://before-die-app.vercel.app/id/agents"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://before-die-app.vercel.app/en/agents</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="https://before-die-app.vercel.app/id/agents"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://before-die-app.vercel.app/en/agents"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>
