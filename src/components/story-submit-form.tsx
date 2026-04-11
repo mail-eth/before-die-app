@@ -1,0 +1,273 @@
+"use client";
+
+import { useState } from "react";
+import type { Locale } from "@/lib/content";
+
+type Copy = {
+  formName: string;
+  formLanguage: string;
+  formPublicNote: string;
+  formSubmit: string;
+  formLoading: string;
+  formSuccess: string;
+  formError: string;
+  formPlaceholderName: string;
+  languageLabel: { id: string; en: string };
+  storiesSuccessMessage: string;
+  storiesErrorMessage: string;
+  storyFormTitle: string;
+  storyFormContent: string;
+  storyFormAuthor: string;
+  storyFormPlaceholderTitle: string;
+  storyFormPlaceholderContent: string;
+  moodReflective: string;
+  moodHopeful: string;
+  moodSomber: string;
+  moodFierce: string;
+};
+
+type AuthorType = "name" | "emoji" | "anonymous";
+type Mood = "reflective" | "hopeful" | "somber" | "fierce";
+
+export function StorySubmitForm({
+  locale,
+  copy,
+}: {
+  locale: Locale;
+  copy: Copy;
+}) {
+  const [pending, setPending] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [privacy, setPrivacy] = useState<AuthorType>("anonymous");
+  const [mood, setMood] = useState<Mood>("reflective");
+
+  const moods: { value: Mood; label: string }[] = [
+    { value: "reflective", label: copy.moodReflective },
+    { value: "hopeful", label: copy.moodHopeful },
+    { value: "somber", label: copy.moodSomber },
+    { value: "fierce", label: copy.moodFierce },
+  ];
+
+  async function onSubmit(formData: FormData) {
+    setPending(true);
+    setMessage(null);
+    setStatus("idle");
+
+    let authorName = "";
+    if (privacy === "anonymous") {
+      authorName = "Anonymous";
+    } else if (privacy === "emoji") {
+      authorName = formData.get("emoji") as string || "🙈";
+    } else {
+      authorName = formData.get("name") as string || "";
+    }
+
+    const payload = {
+      title: formData.get("title") as string || "",
+      content: formData.get("content") as string || "",
+      authorName,
+      authorType: privacy,
+      mood,
+      language: formData.get("language") as string || locale,
+      website: formData.get("website") as string || "",
+    };
+
+    try {
+      const res = await fetch("/api/stories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await res.json()) as { ok: boolean; message: string };
+      setStatus(data.ok ? "success" : "error");
+      setMessage(data.message);
+    } catch {
+      setStatus("error");
+      setMessage(copy.storiesErrorMessage);
+    } finally {
+      setPending(false);
+    }
+  }
+
+  return (
+    <form
+      action={onSubmit as unknown as string}
+      className="rounded-3xl border border-border/60 bg-card/80 p-8 shadow-[0_8px_40px_rgba(0,0,0,0.06)] backdrop-blur"
+    >
+      {/* Privacy Selector */}
+      <div className="mb-6">
+        <label className="mb-2 block text-sm font-medium text-foreground/80">
+          🫣 {copy.formName}
+        </label>
+        <div className="flex gap-2">
+          {(["anonymous", "emoji", "name"] as AuthorType[]).map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              onClick={() => setPrivacy(mode)}
+              className={`rounded-full px-4 py-2 text-xs font-medium transition-all ${
+                privacy === mode
+                  ? mode === "anonymous"
+                    ? "bg-[#C4A882] text-white"
+                    : mode === "emoji"
+                    ? "bg-[#8FAF9A] text-white"
+                    : "bg-foreground text-background"
+                  : "bg-card border border-border/60 text-muted-foreground hover:border-border"
+              }`}
+            >
+              {mode === "anonymous" && "🔒 Anonymous"}
+              {mode === "emoji" && "🙈 Emoji"}
+              {mode === "name" && "✏️ Name"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Name field */}
+      {privacy === "name" && (
+        <div className="mb-5 space-y-2">
+          <label className="text-sm font-medium text-foreground/80">
+            {copy.formName}
+          </label>
+          <input
+            name="name"
+            required={privacy === "name"}
+            minLength={2}
+            maxLength={40}
+            placeholder={copy.formPlaceholderName}
+            className="w-full rounded-xl border border-border/70 bg-input-bg px-4 py-3 text-sm text-foreground placeholder-muted-foreground/60 outline-none transition focus:border-accent/60 focus:ring-2 focus:ring-ring/30"
+          />
+        </div>
+      )}
+
+      {/* Emoji field */}
+      {privacy === "emoji" && (
+        <div className="mb-5 space-y-2">
+          <label className="text-sm font-medium text-foreground/80">
+            Pilih emoji kamu
+          </label>
+          <input
+            name="emoji"
+            required={privacy === "emoji"}
+            maxLength={10}
+            placeholder="🙈"
+            className="w-full rounded-xl border border-border/70 bg-input-bg px-4 py-3 text-2xl text-center outline-none transition focus:border-accent/60 focus:ring-2 focus:ring-ring/30"
+          />
+        </div>
+      )}
+
+      {/* Mood Selector */}
+      <div className="mb-6">
+        <label className="mb-2 block text-sm font-medium text-foreground/80">
+          Mood cerita
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {moods.map((m) => (
+            <button
+              key={m.value}
+              type="button"
+              onClick={() => setMood(m.value)}
+              className={`rounded-full px-4 py-2 text-xs font-medium transition-all ${
+                mood === m.value
+                  ? "bg-accent text-white"
+                  : "bg-card border border-border/60 text-muted-foreground hover:border-border"
+              }`}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Title */}
+      <div className="mb-5 space-y-2">
+        <label className="text-sm font-medium text-foreground/80">
+          {copy.storyFormTitle}
+        </label>
+        <input
+          name="title"
+          required
+          minLength={5}
+          maxLength={120}
+          placeholder={copy.storyFormPlaceholderTitle}
+          className="w-full rounded-xl border border-border/70 bg-input-bg px-4 py-3 text-sm text-foreground placeholder-muted-foreground/60 outline-none transition focus:border-accent/60 focus:ring-2 focus:ring-ring/30"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="mb-5 space-y-2">
+        <label className="text-sm font-medium text-foreground/80">
+          {copy.storyFormContent}
+        </label>
+        <textarea
+          name="content"
+          required
+          minLength={50}
+          maxLength={5000}
+          rows={8}
+          placeholder={copy.storyFormPlaceholderContent}
+          className="w-full resize-none rounded-xl border border-border/70 bg-input-bg px-4 py-3 text-sm text-foreground placeholder-muted-foreground/60 outline-none transition focus:border-accent/60 focus:ring-2 focus:ring-ring/30"
+        />
+      </div>
+
+      {/* Language */}
+      <div className="mb-5 space-y-2">
+        <label className="text-sm font-medium text-foreground/80">
+          {copy.formLanguage}
+        </label>
+        <select
+          name="language"
+          defaultValue={locale}
+          className="w-full rounded-xl border border-border/70 bg-input-bg px-4 py-3 text-sm text-foreground outline-none transition focus:border-accent/60 focus:ring-2 focus:ring-ring/30"
+        >
+          <option value="id">{copy.languageLabel.id}</option>
+          <option value="en">{copy.languageLabel.en}</option>
+        </select>
+      </div>
+
+      {/* Honeypot */}
+      <input
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        className="hidden"
+        aria-hidden="true"
+      />
+
+      {/* Privacy note */}
+      <p className="mt-5 text-xs leading-relaxed text-muted-foreground/60 italic">
+        🔒 {copy.formPublicNote}
+      </p>
+
+      {/* Submit */}
+      <button
+        type="submit"
+        disabled={pending}
+        className="mt-6 w-full rounded-xl bg-foreground py-3.5 text-sm font-medium text-background transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {pending ? (
+          <span className="inline-flex items-center gap-2">
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-background/30 border-t-background" />
+            {copy.formLoading}
+          </span>
+        ) : (
+          copy.formSubmit
+        )}
+      </button>
+
+      {/* Feedback */}
+      {message ? (
+        <div
+          className={`mt-4 rounded-xl px-4 py-3 text-sm ${
+            status === "success"
+              ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+              : "bg-red-500/10 text-red-700 dark:text-red-300"
+          }`}
+        >
+          {message}
+        </div>
+      ) : null}
+    </form>
+  );
+}

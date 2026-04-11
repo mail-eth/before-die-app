@@ -5,7 +5,8 @@ import { LanguageToggle } from "@/components/language-toggle";
 import { MusicPlayer } from "@/components/music-player";
 import { SubmitForm } from "@/components/submit-form";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { dictionaries, isLocale, type Dream } from "@/lib/content";
+import { StoryCard } from "@/components/story-card";
+import { dictionaries, isLocale, type Dream, type Story } from "@/lib/content";
 import { relativeTime } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -25,6 +26,21 @@ async function getDreams(): Promise<Dream[]> {
   }
 }
 
+async function getFeaturedStory(): Promise<Story | null> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://before-die-app.vercel.app";
+    const res = await fetch(`${baseUrl}/api/stories?featured=true&limit=1`, {
+      next: { revalidate: 0 },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.stories?.length) return null;
+    return data.stories[0];
+  } catch {
+    return null;
+  }
+}
+
 export default async function LocalePage({
   params,
 }: {
@@ -37,7 +53,17 @@ export default async function LocalePage({
   }
 
   const copy = dictionaries[locale];
-  const dreams = await getDreams();
+  const [dreams, featuredStory] = await Promise.all([
+    getDreams(),
+    getFeaturedStory(),
+  ]);
+
+  const moodDict = {
+    moodReflective: copy.moodReflective,
+    moodHopeful: copy.moodHopeful,
+    moodSomber: copy.moodSomber,
+    moodFierce: copy.moodFierce,
+  };
 
   return (
     <main className="relative flex min-h-screen w-full flex-col">
@@ -45,13 +71,33 @@ export default async function LocalePage({
 
       {/* ── Header ── */}
       <header className="sticky top-0 z-50 flex items-center justify-between gap-4 border-b border-border/50 bg-background/70 px-6 py-4 backdrop-blur-md md:px-10 lg:px-14">
-        <Link
-          href={`/${locale}`}
-          className="font-serif text-xl font-semibold tracking-wide text-foreground/90 transition hover:text-foreground"
-          style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-        >
-          {copy.brand}
-        </Link>
+        <div className="flex items-center gap-6">
+          <Link
+            href={`/${locale}`}
+            className="font-serif text-xl font-semibold tracking-wide text-foreground/90 transition hover:text-foreground"
+            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+          >
+            {copy.brand}
+          </Link>
+          <nav className="flex items-center gap-1 text-sm">
+            <Link
+              href={`/${locale}`}
+              className={`rounded-full px-4 py-1.5 transition-all ${
+                true ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {copy.navWall}
+            </Link>
+            <Link
+              href={`/${locale}/stories`}
+              className={`rounded-full px-4 py-1.5 transition-all ${
+                false ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {copy.storiesNavLink}
+            </Link>
+          </nav>
+        </div>
         <div className="flex items-center gap-3">
           <LanguageToggle locale={locale} />
           <ThemeToggle />
@@ -101,6 +147,20 @@ export default async function LocalePage({
           <div className="h-px w-12 bg-border" />
         </div>
       </section>
+
+      {/* ── Featured Story ── */}
+      {featuredStory && (
+        <section className="relative px-6 pb-16 md:px-10 lg:px-14">
+          <div className="mx-auto max-w-3xl">
+            <p className="mb-6 text-center text-xs uppercase tracking-[0.3em] text-accent/70">
+              {locale === "id" ? "Cerita Pilihan" : "Featured Story"}
+            </p>
+            <div className="rounded-2xl border border-accent/20 bg-accent/5 p-6 md:p-8">
+              <StoryCard story={featuredStory} locale={locale} dict={moodDict} />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── Dream Wall ── */}
       <section id="wall" className="relative px-6 pb-24 md:px-10 lg:px-14">

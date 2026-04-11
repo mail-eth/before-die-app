@@ -9,6 +9,34 @@ export type Dream = {
   createdAt: string;
 };
 
+export type AuthorType = "name" | "emoji" | "anonymous";
+export type Mood = "reflective" | "hopeful" | "somber" | "fierce";
+
+export type Story = {
+  id: string;
+  title: string;
+  content: string;
+  authorName: string;
+  authorType: AuthorType;
+  mood: Mood;
+  language: Locale;
+  createdAt: string;
+};
+
+export type StoryRow = {
+  id: string;
+  title: string;
+  content: string;
+  author_name: string;
+  author_type: AuthorType;
+  mood: Mood;
+  language: Locale;
+  created_at: string;
+  updated_at: string;
+  featured: boolean;
+  published: boolean;
+};
+
 export const dictionaries = {
   id: {
     brand: "Before Die",
@@ -45,6 +73,26 @@ export const dictionaries = {
     relativeNow: "baru saja",
     notConfigured: "Backend database belum dikonfigurasi. Saat ini masih mode preview.",
     languageLabel: { id: "Indonesia", en: "English" },
+
+    // Stories section
+    storiesTitle: "Stories",
+    storiesSubtitle: "Cerita-cerita yang mungkin bisa bikin kamu refletir.",
+    storiesNavLink: "Stories",
+    storiesEmptyTitle: "Belum ada story publik.",
+    storiesEmptyBody: "Jadilah yang pertama menulis story di sini.",
+    storiesSubmitLabel: "Tulis Story",
+    storiesLoading: "Memuat...",
+    storiesSuccessMessage: "Story kamu sudah masuk. Terima kasih sudah berbagi.",
+    storiesErrorMessage: "Story belum bisa dipublish sekarang. Coba lagi nanti.",
+    storyFormTitle: "Judul Cerita",
+    storyFormContent: "Ceritakan pengalaman hidupmu",
+    storyFormAuthor: "Nama (atau anonymous)",
+    storyFormPlaceholderTitle: "Apa yang ada di pikiranmu?",
+    storyFormPlaceholderContent: "ceritakan pengalaman hidupmu...",
+    moodReflective: "Reflective",
+    moodHopeful: "Hopeful",
+    moodSomber: "Somber",
+    moodFierce: "Fierce",
   },
   en: {
     brand: "Before Die",
@@ -82,6 +130,26 @@ export const dictionaries = {
     relativeNow: "just now",
     notConfigured: "Database backend is not configured yet. The site is currently in preview mode.",
     languageLabel: { id: "Indonesian", en: "English" },
+
+    // Stories section
+    storiesTitle: "Stories",
+    storiesSubtitle: "Stories that might make you stop and think.",
+    storiesNavLink: "Stories",
+    storiesEmptyTitle: "No public stories yet.",
+    storiesEmptyBody: "Be the first to share your story here.",
+    storiesSubmitLabel: "Write a Story",
+    storiesLoading: "Loading...",
+    storiesSuccessMessage: "Your story has been received. Thank you for sharing.",
+    storiesErrorMessage: "Your story couldn't be published right now. Please try again later.",
+    storyFormTitle: "Story Title",
+    storyFormContent: "Your story",
+    storyFormAuthor: "Name (or anonymous)",
+    storyFormPlaceholderTitle: "What's on your mind?",
+    storyFormPlaceholderContent: "tell your story...",
+    moodReflective: "Reflective",
+    moodHopeful: "Hopeful",
+    moodSomber: "Somber",
+    moodFierce: "Fierce",
   },
 } as const;
 

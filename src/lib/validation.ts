@@ -8,6 +8,16 @@ export const dreamSchema = z.object({
   website: z.string().optional().default(""),
 });
 
+export const storySchema = z.object({
+  title: z.string().trim().min(5).max(120),
+  content: z.string().trim().min(50).max(5000),
+  authorName: z.string().trim().min(1).max(40),
+  authorType: z.enum(["name", "emoji", "anonymous"]),
+  mood: z.enum(["reflective", "hopeful", "somber", "fierce"]),
+  language: z.enum(["id", "en"]),
+  website: z.string().optional().default(""),
+});
+
 // Strip all HTML tags and control characters
 function sanitize(input: string): string {
   return input
@@ -46,6 +56,39 @@ export function moderateSubmission(input: z.infer<typeof dreamSchema>) {
   return {
     status: "published" as const,
     message: "Your dream has been received.",
+    value: sanitized,
+  };
+}
+
+export function moderateStory(input: z.infer<typeof storySchema>) {
+  // Honeypot check
+  if (input.website) {
+    return { status: "rejected" as const, message: "Bot detected." };
+  }
+
+  // Sanitize all text fields
+  const sanitized = {
+    title: sanitize(input.title),
+    content: sanitize(input.content),
+    authorName: sanitize(input.authorName),
+    authorType: input.authorType,
+    mood: input.mood,
+    language: input.language,
+  };
+
+  // Basic anti-spam: no links
+  const joined = `${sanitized.title} ${sanitized.content} ${sanitized.authorName}`;
+  if (bannedLink.test(joined) || heavySpam.test(joined)) {
+    return {
+      status: "rejected" as const,
+      message: "Your story could not be published right now.",
+    };
+  }
+
+  // All submissions go to moderation queue (published = false)
+  return {
+    status: "pending" as const,
+    message: "Your story has been received and is under review.",
     value: sanitized,
   };
 }
