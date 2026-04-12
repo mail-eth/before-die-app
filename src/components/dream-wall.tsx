@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Dream, Locale } from "@/lib/content";
-import { relativeTime } from "@/lib/utils";
+import { cn, relativeTime } from "@/lib/utils";
 
 type Copy = {
   wallTitle: string;
@@ -31,25 +31,50 @@ export function DreamWall({
   locale: Locale;
   copy: Copy;
 }) {
+  const defaultFilter: Locale | "all" = locale;
   const [dreams, setDreams] = useState(initialItems);
   const [nextCursor, setNextCursor] = useState(initialNextCursor);
+  const [totalCount, setTotalCount] = useState(total);
   const [loading, setLoading] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<Locale | "all">(defaultFilter);
+
+  async function fetchDreams(filter: Locale | "all", offset = 0, append = false) {
+    const params = new URLSearchParams({ limit: "24", offset: String(offset) });
+    if (filter !== "all") {
+      params.set("language", filter);
+    }
+
+    const res = await fetch(`/api/dreams?${params.toString()}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    if (!res.ok) return;
+
+    const data = (await res.json()) as DreamsResponse;
+    setDreams((current) => (append ? [...current, ...data.items] : data.items));
+    setNextCursor(data.nextCursor);
+    setTotalCount(data.total);
+  }
 
   async function loadMore() {
     if (!nextCursor || loading) return;
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/dreams?offset=${nextCursor}&limit=24`, {
-        method: "GET",
-        cache: "no-store",
-      });
+      await fetchDreams(activeFilter, Number(nextCursor), true);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-      if (!res.ok) return;
+  async function changeFilter(filter: Locale | "all") {
+    if (filter === activeFilter || loading) return;
 
-      const data = (await res.json()) as DreamsResponse;
-      setDreams((current) => [...current, ...data.items]);
-      setNextCursor(data.nextCursor);
+    setLoading(true);
+    setActiveFilter(filter);
+    try {
+      await fetchDreams(filter, 0, false);
     } finally {
       setLoading(false);
     }
@@ -69,10 +94,34 @@ export function DreamWall({
             {copy.wallTitle}
           </h2>
           <p className="mt-2 text-xs text-muted-foreground/50">
-            {total} {locale === "id" ? "mimpi" : "dreams"} {locale === "id" ? "tercatat" : "recorded"}
+            {totalCount} {locale === "id" ? "mimpi" : "dreams"} {locale === "id" ? "tercatat" : "recorded"}
           </p>
         </div>
-        <p className="max-w-md text-sm leading-7 text-muted-foreground">{copy.wallSubtitle}</p>
+        <div className="flex flex-col items-start gap-4 md:items-end">
+          <p className="max-w-md text-sm leading-7 text-muted-foreground">{copy.wallSubtitle}</p>
+          <div className="inline-flex rounded-full border border-border/60 bg-card/60 p-1 backdrop-blur">
+            {([
+              { value: "all", label: locale === "id" ? "Semua" : "All" },
+              { value: "id", label: "ID" },
+              { value: "en", label: "EN" },
+            ] as const).map((filter) => (
+              <button
+                key={filter.value}
+                type="button"
+                onClick={() => changeFilter(filter.value)}
+                disabled={loading}
+                className={cn(
+                  "rounded-full px-3 py-1.5 text-xs font-medium transition-all",
+                  activeFilter === filter.value
+                    ? "bg-foreground text-background"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {dreams.length ? (

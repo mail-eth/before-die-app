@@ -95,20 +95,28 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const limit = Math.min(Math.max(Number(searchParams.get("limit") ?? 24), 1), 100);
   const offset = Math.max(Number(searchParams.get("offset") ?? 0), 0);
+  const languageParam = searchParams.get("language");
+  const language = languageParam === "id" || languageParam === "en" ? languageParam : null;
 
   if (!hasSupabaseEnv()) {
-    const items = sampleDreams.slice(offset, offset + limit);
-    const nextCursor = offset + items.length < sampleDreams.length ? String(offset + items.length) : null;
-    return NextResponse.json({ items, nextCursor, total: sampleDreams.length, preview: true });
+    const filtered = language ? sampleDreams.filter((item) => item.language === language) : sampleDreams;
+    const items = filtered.slice(offset, offset + limit);
+    const nextCursor = offset + items.length < filtered.length ? String(offset + items.length) : null;
+    return NextResponse.json({ items, nextCursor, total: filtered.length, preview: true });
   }
 
   const supabase = getSupabaseAdmin();
-  const { data, error, count } = await supabase
+  let query = supabase
     .from("dreams")
     .select("id,name,dream,reason,language,created_at", { count: "exact" })
     .eq("status", "published")
-    .order("created_at", { ascending: false })
-    .range(offset, offset + limit - 1);
+    .order("created_at", { ascending: false });
+
+  if (language) {
+    query = query.eq("language", language);
+  }
+
+  const { data, error, count } = await query.range(offset, offset + limit - 1);
 
   if (error) {
     return NextResponse.json({ items: sampleDreams, nextCursor: null, total: sampleDreams.length, preview: true }, { status: 200 });
