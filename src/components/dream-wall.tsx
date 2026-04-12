@@ -31,7 +31,7 @@ export function DreamWall({
   locale: Locale;
   copy: Copy;
 }) {
-  const defaultFilter: Locale | "all" = locale;
+  const defaultFilter: Locale | "all" = "all";
   const [dreams, setDreams] = useState(initialItems);
   const [nextCursor, setNextCursor] = useState(initialNextCursor);
   const [totalCount, setTotalCount] = useState(total);

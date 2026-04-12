@@ -12,10 +12,10 @@ import { dictionaries, isLocale, type Dream, type Story } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
-async function getDreams(locale: "id" | "en"): Promise<{ items: Dream[]; nextCursor: string | null; total: number }> {
+async function getDreams(): Promise<{ items: Dream[]; nextCursor: string | null; total: number }> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://before-die-app.vercel.app";
-    const res = await fetch(`${baseUrl}/api/dreams?limit=24&language=${locale}`, {
+    const res = await fetch(`${baseUrl}/api/dreams?limit=24`, {
       next: { revalidate: 0 },
     });
     if (!res.ok) return { items: [], nextCursor: null, total: 0 };
@@ -58,7 +58,7 @@ export default async function LocalePage({
 
   const copy = dictionaries[locale];
   const [dreamsData, featuredStory] = await Promise.all([
-    getDreams(locale),
+    getDreams(),
     getFeaturedStory(),
   ]);
 
