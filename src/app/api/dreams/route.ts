@@ -91,33 +91,45 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const limit = Math.min(Math.max(Number(searchParams.get("limit") ?? 24), 1), 100);
+  const offset = Math.max(Number(searchParams.get("offset") ?? 0), 0);
+
   if (!hasSupabaseEnv()) {
-    return NextResponse.json({ items: sampleDreams, nextCursor: null, preview: true });
+    const items = sampleDreams.slice(offset, offset + limit);
+    const nextCursor = offset + items.length < sampleDreams.length ? String(offset + items.length) : null;
+    return NextResponse.json({ items, nextCursor, total: sampleDreams.length, preview: true });
   }
 
   const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
+  const { data, error, count } = await supabase
     .from("dreams")
-    .select("id,name,dream,reason,language,created_at")
+    .select("id,name,dream,reason,language,created_at", { count: "exact" })
     .eq("status", "published")
     .order("created_at", { ascending: false })
-    .limit(12);
+    .range(offset, offset + limit - 1);
 
   if (error) {
-    return NextResponse.json({ items: sampleDreams, nextCursor: null, preview: true }, { status: 200 });
+    return NextResponse.json({ items: sampleDreams, nextCursor: null, total: sampleDreams.length, preview: true }, { status: 200 });
   }
 
+  const items = data.map((item) => ({
+    id: item.id,
+    name: item.name,
+    dream: item.dream,
+    reason: item.reason,
+    language: item.language,
+    createdAt: item.created_at,
+  }));
+
+  const total = count ?? items.length;
+  const nextCursor = offset + items.length < total ? String(offset + items.length) : null;
+
   return NextResponse.json({
-    items: data.map((item) => ({
-      id: item.id,
-      name: item.name,
-      dream: item.dream,
-      reason: item.reason,
-      language: item.language,
-      createdAt: item.created_at,
-    })),
-    nextCursor: null,
+    items,
+    nextCursor,
+    total,
     preview: false,
   });
 }

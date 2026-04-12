@@ -7,23 +7,26 @@ import { MusicPlayer } from "@/components/music-player";
 import { SubmitForm } from "@/components/submit-form";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { StoryCard } from "@/components/story-card";
+import { DreamWall } from "@/components/dream-wall";
 import { dictionaries, isLocale, type Dream, type Story } from "@/lib/content";
-import { relativeTime } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
-async function getDreams(): Promise<Dream[]> {
+async function getDreams(): Promise<{ items: Dream[]; nextCursor: string | null; total: number }> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://before-die-app.vercel.app";
-    const res = await fetch(`${baseUrl}/api/dreams`, {
+    const res = await fetch(`${baseUrl}/api/dreams?limit=24`, {
       next: { revalidate: 0 },
     });
-    if (!res.ok) return [];
+    if (!res.ok) return { items: [], nextCursor: null, total: 0 };
     const data = await res.json();
-    if (!data.items?.length) return [];
-    return data.items;
+    return {
+      items: data.items ?? [],
+      nextCursor: data.nextCursor ?? null,
+      total: data.total ?? data.items?.length ?? 0,
+    };
   } catch {
-    return [];
+    return { items: [], nextCursor: null, total: 0 };
   }
 }
 
@@ -54,7 +57,7 @@ export default async function LocalePage({
   }
 
   const copy = dictionaries[locale];
-  const [dreams, featuredStory] = await Promise.all([
+  const [dreamsData, featuredStory] = await Promise.all([
     getDreams(),
     getFeaturedStory(),
   ]);
@@ -170,74 +173,13 @@ export default async function LocalePage({
         </section>
       )}
 
-      {/* ── Dream Wall ── */}
-      <section id="wall" className="relative px-6 pb-24 md:px-10 lg:px-14">
-        {/* Section header */}
-        <div className="mb-14 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="mb-2 text-xs uppercase tracking-[0.3em] text-muted-foreground/60">
-              {locale === "id" ? "Kumpulan mimpi" : "A collection of"}
-            </p>
-            <h2
-              className="text-4xl font-bold tracking-tight md:text-5xl"
-              style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-            >
-              {copy.wallTitle}
-            </h2>
-            <p className="mt-2 text-xs text-muted-foreground/50">
-              {dreams.length} {locale === "id" ? "mimpi" : "dreams"} {locale === "id" ? "tercatat" : "recorded"}
-            </p>
-          </div>
-          <p className="max-w-md text-sm leading-7 text-muted-foreground">
-            {copy.wallSubtitle}
-          </p>
-        </div>
-
-        {/* Grid */}
-        {dreams.length ? (
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {dreams.map((dream) => (
-              <article
-                key={dream.id}
-                className="group relative flex flex-col rounded-2xl border border-border/60 bg-card/70 p-7 backdrop-blur transition hover:-translate-y-1 hover:border-border/90 hover:bg-card/90 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)]"
-              >
-                {/* Top meta */}
-                <div className="mb-6 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <span className="inline-block rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-medium uppercase tracking-wider text-accent">
-                      {dream.name}
-                    </span>
-                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground/50">
-                      {dream.language === "id" ? "ID" : "EN"}
-                    </span>
-                  </div>
-                  <span className="text-xs text-muted-foreground/50">
-                    {relativeTime(dream.createdAt)}
-                  </span>
-                </div>
-
-                {/* The dream */}
-                <h3 className="mb-4 text-xl font-semibold leading-snug tracking-tight text-foreground">
-                  &ldquo;{dream.dream}&rdquo;
-                </h3>
-
-                {/* Reason */}
-                <p className="mt-auto text-sm leading-relaxed text-muted-foreground">
-                  {dream.reason}
-                </p>
-
-                {/* Subtle accent line on hover */}
-                <div className="absolute inset-x-7 top-0 h-px scale-x-0 bg-gradient-to-r from-transparent via-accent/40 to-transparent transition-transform duration-500 group-hover:scale-x-100" />
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-2xl border border-dashed border-border/50 px-6 py-20 text-center">
-            <h3 className="text-lg font-medium">{copy.emptyTitle}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{copy.emptyBody}</p>
-          </div>
-        )}
-      </section>
+      <DreamWall
+        initialItems={dreamsData.items}
+        initialNextCursor={dreamsData.nextCursor}
+        total={dreamsData.total}
+        locale={locale}
+        copy={copy}
+      />
 
       {/* ── Submit Section ── */}
       <section
