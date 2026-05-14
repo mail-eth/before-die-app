@@ -27,7 +27,9 @@ export function SubmitForm({ locale, copy }: { locale: Locale; copy: Copy }) {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [privacy, setPrivacy] = useState<PrivacyMode>("anonymous");
 
-  async function onSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     setPending(true);
     setMessage(null);
     setStatus("idle");
@@ -69,7 +71,7 @@ export function SubmitForm({ locale, copy }: { locale: Locale; copy: Copy }) {
 
   return (
     <form
-      action={onSubmit as unknown as string}
+      onSubmit={handleSubmit}
       className="rounded-3xl border border-border/60 bg-card/80 p-8 shadow-[0_8px_40px_rgba(0,0,0,0.06)] backdrop-blur"
     >
       {/* Privacy Selector */}

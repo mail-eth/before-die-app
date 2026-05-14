@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin, hasSupabaseEnv } from "@/lib/supabase";
 import { storySchema, moderateStory } from "@/lib/validation";
+import { rateLimit, POST_RATE_LIMIT, GET_RATE_LIMIT } from "@/lib/rate-limit";
 import type { Story, AuthorType, Mood } from "@/lib/content";
 
 type Locale = "id" | "en";
@@ -9,7 +10,7 @@ const messages = {
   id: {
     notConfigured: "Backend database belum dikonfigurasi.",
     unexpected: "Terjadi error tak terduga.",
-    success: "Story kamu sudah masuk dan sedang dalam moderasi.",
+    success: "Story kamu sudah dipublish. Terima kasih sudah berbagi.",
     rejected: "Story belum bisa dipublish sekarang.",
     botDetected: "Bot terdeteksi.",
     invalidInput: "Tolong cek ulang isian kamu lalu coba lagi.",
@@ -17,7 +18,7 @@ const messages = {
   en: {
     notConfigured: "Backend database is not configured.",
     unexpected: "An unexpected error occurred.",
-    success: "Your story has been received and is under review.",
+    success: "Your story has been published. Thank you for sharing.",
     rejected: "Your story could not be published right now.",
     botDetected: "Bot detected.",
     invalidInput: "Please review your submission and try again.",
@@ -50,6 +51,15 @@ function mapRow(row: Record<string, unknown>): Story {
 }
 
 export async function GET(request: Request) {
+  // Rate limit check
+  const rl = rateLimit(request, GET_RATE_LIMIT);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { stories: [], message: "Too many requests." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil(rl.resetMs / 1000)) } },
+    );
+  }
+
   const { searchParams } = new URL(request.url);
   const featured = searchParams.get("featured") === "true";
   const limit = Math.min(parseInt(searchParams.get("limit") ?? "20", 10), 50);
@@ -101,6 +111,15 @@ export async function POST(request: Request) {
   let locale: Locale = "en";
 
   try {
+    // Rate limit check
+    const rl = rateLimit(request, POST_RATE_LIMIT);
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { ok: false, status: "rejected", message: "Too many requests. Please try again later." },
+        { status: 429, headers: { "Retry-After": String(Math.ceil(rl.resetMs / 1000)) } },
+      );
+    }
+
     const json = await request.json();
     locale = detectLanguage(json);
     const copy = getMessages(locale);
@@ -123,7 +142,7 @@ export async function POST(request: Request) {
 
     if (!hasSupabaseEnv()) {
       return NextResponse.json(
-        { ok: true, status: "pending", message: copy.notConfigured },
+        { ok: true, status: "published", message: copy.notConfigured },
         { status: 200 },
       );
     }
@@ -149,7 +168,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { ok: true, status: "pending", message: copy.success },
+      { ok: true, status: "published", message: copy.success },
       { status: 200 },
     );
   } catch (err) {

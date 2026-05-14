@@ -6,40 +6,15 @@ import { MusicPlayer } from "@/components/music-player";
 import { SubmitForm } from "@/components/submit-form";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { StoryCard } from "@/components/story-card";
-import { dictionaries, isLocale, type Dream, type Story } from "@/lib/content";
+import { ResonateButton } from "@/components/resonate-button";
+import { ShareDreamButton } from "@/components/share-dream-button";
+import { DreamCounter } from "@/components/dream-counter";
+import { InspireMe } from "@/components/inspire-me";
+import { dictionaries, isLocale } from "@/lib/content";
+import { getDreams, getStories, getDreamCount } from "@/lib/queries";
 import { relativeTime } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
-
-async function getDreams(): Promise<Dream[]> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://before-die-app.vercel.app";
-    const res = await fetch(`${baseUrl}/api/dreams`, {
-      next: { revalidate: 0 },
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    if (!data.items?.length) return [];
-    return data.items;
-  } catch {
-    return [];
-  }
-}
-
-async function getFeaturedStory(): Promise<Story | null> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://before-die-app.vercel.app";
-    const res = await fetch(`${baseUrl}/api/stories?featured=true&limit=1`, {
-      next: { revalidate: 0 },
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!data.stories?.length) return null;
-    return data.stories[0];
-  } catch {
-    return null;
-  }
-}
 
 export default async function LocalePage({
   params,
@@ -53,9 +28,10 @@ export default async function LocalePage({
   }
 
   const copy = dictionaries[locale];
-  const [dreams, featuredStory] = await Promise.all([
+  const [dreams, featuredStory, dreamCount] = await Promise.all([
     getDreams(),
-    getFeaturedStory(),
+    getStories({ featured: true, limit: 1 }).then((s) => s[0] ?? null),
+    getDreamCount(),
   ]);
 
   const moodDict = {
@@ -82,23 +58,19 @@ export default async function LocalePage({
           <nav className="flex items-center gap-1 text-sm">
             <Link
               href={`/${locale}`}
-              className={`rounded-full px-4 py-1.5 transition-all ${
-                true ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
-              }`}
+              className="rounded-full bg-foreground px-4 py-1.5 text-background transition-all"
             >
               {copy.navWall}
             </Link>
             <Link
               href={`/${locale}/stories`}
-              className={`rounded-full px-4 py-1.5 transition-all ${
-                false ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
-              }`}
+              className="rounded-full px-4 py-1.5 text-muted-foreground transition-all hover:text-foreground"
             >
               {copy.storiesNavLink}
             </Link>
             <Link
               href={`/${locale}/agents`}
-              className={`rounded-full px-4 py-1.5 transition-all text-muted-foreground hover:text-foreground`}
+              className="rounded-full px-4 py-1.5 text-muted-foreground transition-all hover:text-foreground"
             >
               For Agents
             </Link>
@@ -144,6 +116,12 @@ export default async function LocalePage({
           >
             {copy.heroSecondary}
           </a>
+        </div>
+
+        {/* Counter + Inspire Me */}
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+          <DreamCounter initialCount={dreamCount} locale={locale} />
+          <InspireMe locale={locale} />
         </div>
 
         {/* Decorative divider */}
@@ -220,6 +198,12 @@ export default async function LocalePage({
                 <p className="mt-auto text-sm leading-relaxed text-muted-foreground">
                   {dream.reason}
                 </p>
+
+                {/* Actions: Resonate + Share */}
+                <div className="mt-5 flex items-center gap-2">
+                  <ResonateButton dreamId={dream.id} initialCount={dream.resonates} />
+                  <ShareDreamButton dream={dream.dream} name={dream.name} reason={dream.reason} locale={locale} />
+                </div>
 
                 {/* Subtle accent line on hover */}
                 <div className="absolute inset-x-7 top-0 h-px scale-x-0 bg-gradient-to-r from-transparent via-accent/40 to-transparent transition-transform duration-500 group-hover:scale-x-100" />

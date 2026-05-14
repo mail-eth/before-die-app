@@ -21,7 +21,7 @@ const TRACKS = [
 ];
 
 export function MusicPlayer() {
-  const [enabled, setEnabled] = useState(true);
+  const [enabled, setEnabled] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(0);
   const [volume, setVolume] = useState(0.15);
@@ -32,12 +32,8 @@ export function MusicPlayer() {
     const saved = localStorage.getItem("quietwall-music");
     if (saved) {
       const { enabled: wasEnabled, volume: savedVolume } = JSON.parse(saved);
-      setEnabled(wasEnabled !== undefined ? wasEnabled : true);
+      setEnabled(wasEnabled !== undefined ? wasEnabled : false);
       setVolume(savedVolume || 0.15);
-    } else {
-      // Default on, low volume
-      setEnabled(true);
-      setVolume(0.15);
     }
   }, []);
 
@@ -175,7 +171,7 @@ export function MusicPlayer() {
 
           {/* Privacy note */}
           <p className="mt-3 text-center text-[10px] text-[#8A857D]">
-            🎧 Music off by default
+            🎧 Click to enable music
           </p>
         </div>
       )}

@@ -6,25 +6,10 @@ import { MusicPlayer } from "@/components/music-player";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { StoryCard } from "@/components/story-card";
 import { StorySubmitForm } from "@/components/story-submit-form";
-import { dictionaries, isLocale, type Story } from "@/lib/content";
-import { relativeTime } from "@/lib/utils";
+import { dictionaries, isLocale } from "@/lib/content";
+import { getStories } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
-
-async function getStories(featured = false): Promise<Story[]> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://before-die-app.vercel.app";
-    const url = featured
-      ? `${baseUrl}/api/stories?featured=true&limit=1`
-      : `${baseUrl}/api/stories?limit=50`;
-    const res = await fetch(url, { next: { revalidate: 0 } });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.stories ?? [];
-  } catch {
-    return [];
-  }
-}
 
 export default async function StoriesPage({
   params,
@@ -39,8 +24,8 @@ export default async function StoriesPage({
 
   const copy = dictionaries[locale];
   const [featuredStories, allStories] = await Promise.all([
-    getStories(true),
-    getStories(false),
+    getStories({ featured: true, limit: 1 }),
+    getStories({ limit: 50 }),
   ]);
 
   const featured = featuredStories[0] ?? null;

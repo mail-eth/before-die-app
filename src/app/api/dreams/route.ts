@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import { createHash } from "crypto";
 import { sampleDreams } from "@/lib/content";
 import { getSupabaseAdmin, hasSupabaseEnv } from "@/lib/supabase";
 import { dreamSchema, moderateSubmission } from "@/lib/validation";
+import { rateLimit, POST_RATE_LIMIT, GET_RATE_LIMIT } from "@/lib/rate-limit";
 
 type Locale = "id" | "en";
 
@@ -46,6 +48,15 @@ export async function POST(request: Request) {
   let locale: Locale = detectLanguage(null, request);
 
   try {
+    // Rate limit check
+    const limit = rateLimit(request, POST_RATE_LIMIT);
+    if (!limit.allowed) {
+      return NextResponse.json(
+        { ok: false, status: "rejected", message: "Too many requests. Please try again later." },
+        { status: 429, headers: { "Retry-After": String(Math.ceil(limit.resetMs / 1000)) } },
+      );
+    }
+
     const json = await request.json();
     locale = detectLanguage(json, request);
     const copy = getMessages(locale);
@@ -71,13 +82,17 @@ export async function POST(request: Request) {
     }
 
     const supabase = getSupabaseAdmin();
+    const forwarded = request.headers.get("x-forwarded-for");
+    const ip = forwarded?.split(",")[0]?.trim() || "unknown";
+    const ipHash = createHash("sha256").update(ip).digest("hex").slice(0, 16);
+
     const { error } = await supabase.from("dreams").insert({
       name: moderated.value.name,
       dream: moderated.value.dream,
       reason: moderated.value.reason,
       language: moderated.value.language,
       status: "published",
-      ip_hash: "pending",
+      ip_hash: ipHash,
     });
 
     if (error) {
@@ -91,7 +106,16 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  // Rate limit check
+  const limit = rateLimit(request, GET_RATE_LIMIT);
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { items: [], nextCursor: null, message: "Too many requests." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil(limit.resetMs / 1000)) } },
+    );
+  }
+
   if (!hasSupabaseEnv()) {
     return NextResponse.json({ items: sampleDreams, nextCursor: null, preview: true });
   }
@@ -99,7 +123,7 @@ export async function GET() {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("dreams")
-    .select("id,name,dream,reason,language,created_at")
+    .select("id,name,dream,reason,language,created_at,resonates")
     .eq("status", "published")
     .order("created_at", { ascending: false })
     .limit(12);
@@ -116,6 +140,7 @@ export async function GET() {
       reason: item.reason,
       language: item.language,
       createdAt: item.created_at,
+      resonates: item.resonates ?? 0,
     })),
     nextCursor: null,
     preview: false,

@@ -21,4 +21,4 @@ CREATE POLICY "Public can read published" ON public.dreams
 
 DROP POLICY IF EXISTS "Allow insert" ON public.dreams;
 CREATE POLICY "Allow insert" ON public.dreams
-  FOR INSERT TO true;
+  FOR INSERT WITH CHECK (true);

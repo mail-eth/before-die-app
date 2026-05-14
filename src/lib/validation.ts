@@ -85,10 +85,10 @@ export function moderateStory(input: z.infer<typeof storySchema>) {
     };
   }
 
-  // All submissions go to moderation queue (published = false)
+  // Stories are published immediately (no moderation queue)
   return {
-    status: "pending" as const,
-    message: "Your story has been received and is under review.",
+    status: "published" as const,
+    message: "Your story has been published.",
     value: sanitized,
   };
 }

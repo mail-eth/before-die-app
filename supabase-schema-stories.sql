@@ -35,7 +35,7 @@ CREATE POLICY "Public can read stories" ON public.stories
 -- Policy: Anyone can insert a story submission
 DROP POLICY IF EXISTS "Allow insert stories" ON public.stories;
 CREATE POLICY "Allow insert stories" ON public.stories
-  FOR INSERT TO true;
+  FOR INSERT WITH CHECK (true);
 
 -- Policy: Admin can update (feature / publish operations)
 DROP POLICY IF EXISTS "Admin can update stories" ON public.stories;
