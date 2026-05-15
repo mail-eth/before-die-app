@@ -58,47 +58,47 @@ export default async function StoriesPage({
       <MusicPlayer />
 
       {/* ── Header ── */}
-      <header className="sticky top-0 z-50 flex items-center justify-between gap-4 border-b border-border/50 bg-background/70 px-6 py-4 backdrop-blur-md md:px-10 lg:px-14">
-        <div className="flex items-center gap-4">
+      <header className="sticky top-0 z-50 flex items-center justify-between gap-2 border-b border-border/50 bg-background/70 px-4 py-4 backdrop-blur-md md:gap-4 md:px-10 lg:px-14">
+        <div className="flex items-center gap-2 overflow-x-auto md:gap-4">
           <Link
             href={`/${locale}`}
-            className="font-serif text-xl font-semibold tracking-wide text-foreground/90 transition hover:text-foreground"
+            className="font-serif text-lg font-semibold tracking-wide text-foreground/90 transition hover:text-foreground whitespace-nowrap md:text-xl"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
           >
             {copy.brand}
           </Link>
-          <div className="h-5 w-px bg-border" />
+          <div className="h-5 w-px bg-border flex-shrink-0" />
           <Link
             href={`/${locale}`}
-            className="font-serif text-lg font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70"
+            className="font-serif text-sm font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70 whitespace-nowrap md:text-lg"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
           >
             Wall
           </Link>
-          <div className="h-5 w-px bg-border" />
+          <div className="h-5 w-px bg-border flex-shrink-0" />
           <span
-            className="font-serif text-lg font-semibold tracking-wide text-foreground/70"
+            className="font-serif text-sm font-semibold tracking-wide text-foreground/70 whitespace-nowrap md:text-lg"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
           >
             {copy.storiesNavLink}
           </span>
-          <div className="h-5 w-px bg-border" />
+          <div className="h-5 w-px bg-border flex-shrink-0" />
           <Link
             href={`/${locale}/agents`}
-            className="font-serif text-lg font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70"
+            className="font-serif text-sm font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70 whitespace-nowrap md:text-lg"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
           >
             For Agents
           </Link>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
           <LanguageToggle locale={locale} />
           <ThemeToggle />
         </div>
       </header>
 
       {/* ── Back to Wall ── */}
-      <div className="px-6 pt-6 md:px-10 lg:px-14">
+      <div className="px-4 pt-6 md:px-10 lg:px-14">
         <Link
           href={`/${locale}`}
           className="inline-flex items-center gap-2 text-sm text-muted-foreground/60 transition hover:text-foreground/80"
@@ -109,7 +109,7 @@ export default async function StoriesPage({
       </div>
 
       {/* ── Hero ── */}
-      <section className="relative flex flex-col items-center justify-center px-6 pt-12 pb-20 text-center md:px-10 lg:px-14">
+      <section className="relative flex flex-col items-center justify-center px-4 pt-12 pb-20 text-center md:px-10 lg:px-14">
         <p className="mb-6 text-xs uppercase tracking-[0.35em] text-muted-foreground/70">
           {copy.storiesEyebrow}
         </p>
@@ -132,7 +132,7 @@ export default async function StoriesPage({
 
       {/* ── Featured Story ── */}
       {featured && (
-        <section className="relative px-6 pb-12 md:px-10 lg:px-14">
+        <section className="relative px-4 pb-12 md:px-10 lg:px-14">
           <div className="mb-8">
             <p className="mb-3 text-xs uppercase tracking-[0.3em] text-accent/70">
               {locale === "id" ? "Featured" : "Featured"}
@@ -145,7 +145,7 @@ export default async function StoriesPage({
       )}
 
       {/* ── Stories Grid ── */}
-      <section className="relative px-6 pb-24 md:px-10 lg:px-14">
+      <section className="relative px-4 pb-24 md:px-10 lg:px-14">
         {stories.length ? (
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {stories.map((story) => (
@@ -158,7 +158,7 @@ export default async function StoriesPage({
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border border-dashed border-border/50 px-6 py-20 text-center">
+          <div className="rounded-2xl border border-dashed border-border/50 px-4 py-20 text-center">
             <h3 className="text-lg font-medium">{copy.storiesEmptyTitle}</h3>
             <p className="mt-2 text-sm text-muted-foreground">{copy.storiesEmptyBody}</p>
           </div>
@@ -168,7 +168,7 @@ export default async function StoriesPage({
       {/* ── Submit Section ── */}
       <section
         id="share"
-        className="relative px-6 pb-28 md:px-10 lg:px-14"
+        className="relative px-4 pb-28 md:px-10 lg:px-14"
       >
         <div className="mx-auto max-w-5xl">
           <div className="mb-14 text-center">
@@ -189,7 +189,7 @@ export default async function StoriesPage({
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-border/40 px-6 py-12 text-center md:px-10 lg:px-14">
+      <footer className="border-t border-border/40 px-4 py-12 text-center md:px-10 lg:px-14">
         <p
           className="mx-auto max-w-2xl text-sm leading-relaxed italic text-muted-foreground/70"
           style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}

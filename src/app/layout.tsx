@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   title: "Before Die — A Wall of Human Dreams",
   description:
     "Before I die, I want to… A quiet wall of life milestones, dreams, and things worth reaching before everything ends.",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+  },
   openGraph: {
     title: "Before Die",
     description:

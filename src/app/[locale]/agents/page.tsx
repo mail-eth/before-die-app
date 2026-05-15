@@ -84,11 +84,11 @@ export default async function AgentsPage({
       <MusicPlayer />
 
       {/* ── Header ── */}
-      <header className="sticky top-0 z-50 flex items-center justify-between gap-4 border-b border-border/50 bg-background/70 px-6 py-4 backdrop-blur-md md:px-10 lg:px-14">
-        <div className="flex items-center gap-6">
+      <header className="sticky top-0 z-50 flex items-center justify-between gap-2 border-b border-border/50 bg-background/70 px-4 py-4 backdrop-blur-md md:gap-4 md:px-10 lg:px-14">
+        <div className="flex items-center gap-3 md:gap-6 overflow-x-auto">
           <Link
             href={`/${locale}`}
-            className="font-serif text-xl font-semibold tracking-wide text-foreground/90 transition hover:text-foreground"
+            className="font-serif text-lg font-semibold tracking-wide text-foreground/90 transition hover:text-foreground whitespace-nowrap md:text-xl"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
           >
             {dict.brand}
@@ -96,32 +96,32 @@ export default async function AgentsPage({
           <nav className="flex items-center gap-1 text-sm">
             <Link
               href={`/${locale}`}
-              className="rounded-full px-4 py-1.5 text-muted-foreground transition-all hover:text-foreground"
+              className="rounded-full px-3 py-1.5 text-muted-foreground transition-all hover:text-foreground whitespace-nowrap md:px-4"
             >
               {copy.navWall}
             </Link>
             <Link
               href={`/${locale}/stories`}
-              className="rounded-full px-4 py-1.5 text-muted-foreground transition-all hover:text-foreground"
+              className="rounded-full px-3 py-1.5 text-muted-foreground transition-all hover:text-foreground whitespace-nowrap md:px-4"
             >
               Stories
             </Link>
             <Link
               href={`/${locale}/agents`}
-              className="rounded-full bg-foreground px-4 py-1.5 text-background"
+              className="rounded-full bg-foreground px-3 py-1.5 text-background whitespace-nowrap md:px-4"
             >
               {copy.navAgents}
             </Link>
           </nav>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
           <LanguageToggle locale={locale} />
           <ThemeToggle />
         </div>
       </header>
 
       {/* ── Hero ── */}
-      <section className="relative flex flex-col items-center justify-center px-6 pt-24 pb-20 text-center md:px-10 lg:px-14">
+      <section className="relative flex flex-col items-center justify-center px-4 pt-24 pb-20 text-center md:px-10 lg:px-14">
         <p className="mb-6 text-xs uppercase tracking-[0.35em] text-accent/70">
           {copy.eyebrow}
         </p>
@@ -137,7 +137,7 @@ export default async function AgentsPage({
       </section>
 
       {/* ── Install Steps ── */}
-      <section className="relative px-6 pb-20 md:px-10 lg:px-14">
+      <section className="relative px-4 pb-20 md:px-10 lg:px-14">
         <div className="mx-auto max-w-2xl space-y-12">
 
           {/* Step 1 */}
@@ -203,7 +203,7 @@ export default async function AgentsPage({
       </section>
 
       {/* ── Features ── */}
-      <section className="relative px-6 pb-24 md:px-10 lg:px-14">
+      <section className="relative px-4 pb-24 md:px-10 lg:px-14">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-10 text-center text-3xl font-bold tracking-tight md:text-4xl"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
@@ -239,7 +239,7 @@ export default async function AgentsPage({
       </section>
 
       {/* ── Note ── */}
-      <section className="relative px-6 pb-28 md:px-10 lg:px-14">
+      <section className="relative px-4 pb-28 md:px-10 lg:px-14">
         <div className="mx-auto max-w-2xl">
           <div className="rounded-2xl border border-accent/20 bg-accent/5 p-6 text-center">
             <p className="text-sm leading-relaxed text-muted-foreground">
@@ -250,7 +250,7 @@ export default async function AgentsPage({
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-border/40 px-6 py-12 text-center md:px-10 lg:px-14">
+      <footer className="border-t border-border/40 px-4 py-12 text-center md:px-10 lg:px-14">
         <p
           className="mx-auto max-w-2xl text-sm leading-relaxed italic text-muted-foreground/70"
           style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
