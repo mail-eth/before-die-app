@@ -121,7 +121,7 @@ export default async function AgentsPage({
       </header>
 
       {/* ── Hero ── */}
-      <section className="relative flex flex-col items-center justify-center px-6 pt-24 pb-20 text-center md:px-10 lg:px-14">
+      <section className="relative flex flex-col items-center justify-center px-4 pt-24 pb-20 text-center md:px-10 lg:px-14">
         <p className="mb-6 text-xs uppercase tracking-[0.35em] text-accent/70">
           {copy.eyebrow}
         </p>
@@ -137,7 +137,7 @@ export default async function AgentsPage({
       </section>
 
       {/* ── Install Steps ── */}
-      <section className="relative px-6 pb-20 md:px-10 lg:px-14">
+      <section className="relative px-4 pb-20 md:px-10 lg:px-14">
         <div className="mx-auto max-w-2xl space-y-12">
 
           {/* Step 1 */}
@@ -203,7 +203,7 @@ export default async function AgentsPage({
       </section>
 
       {/* ── Features ── */}
-      <section className="relative px-6 pb-24 md:px-10 lg:px-14">
+      <section className="relative px-4 pb-24 md:px-10 lg:px-14">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-10 text-center text-3xl font-bold tracking-tight md:text-4xl"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
@@ -239,7 +239,7 @@ export default async function AgentsPage({
       </section>
 
       {/* ── Note ── */}
-      <section className="relative px-6 pb-28 md:px-10 lg:px-14">
+      <section className="relative px-4 pb-28 md:px-10 lg:px-14">
         <div className="mx-auto max-w-2xl">
           <div className="rounded-2xl border border-accent/20 bg-accent/5 p-6 text-center">
             <p className="text-sm leading-relaxed text-muted-foreground">
@@ -250,7 +250,7 @@ export default async function AgentsPage({
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-border/40 px-6 py-12 text-center md:px-10 lg:px-14">
+      <footer className="border-t border-border/40 px-4 py-12 text-center md:px-10 lg:px-14">
         <p
           className="mx-auto max-w-2xl text-sm leading-relaxed italic text-muted-foreground/70"
           style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
