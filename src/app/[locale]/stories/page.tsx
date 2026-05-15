@@ -58,40 +58,40 @@ export default async function StoriesPage({
       <MusicPlayer />
 
       {/* ── Header ── */}
-      <header className="sticky top-0 z-50 flex items-center justify-between gap-4 border-b border-border/50 bg-background/70 px-6 py-4 backdrop-blur-md md:px-10 lg:px-14">
-        <div className="flex items-center gap-4">
+      <header className="sticky top-0 z-50 flex items-center justify-between gap-2 border-b border-border/50 bg-background/70 px-4 py-4 backdrop-blur-md md:gap-4 md:px-10 lg:px-14">
+        <div className="flex items-center gap-2 overflow-x-auto md:gap-4">
           <Link
             href={`/${locale}`}
-            className="font-serif text-xl font-semibold tracking-wide text-foreground/90 transition hover:text-foreground"
+            className="font-serif text-lg font-semibold tracking-wide text-foreground/90 transition hover:text-foreground whitespace-nowrap md:text-xl"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
           >
             {copy.brand}
           </Link>
-          <div className="h-5 w-px bg-border" />
+          <div className="h-5 w-px bg-border flex-shrink-0" />
           <Link
             href={`/${locale}`}
-            className="font-serif text-lg font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70"
+            className="font-serif text-sm font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70 whitespace-nowrap md:text-lg"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
           >
             Wall
           </Link>
-          <div className="h-5 w-px bg-border" />
+          <div className="h-5 w-px bg-border flex-shrink-0" />
           <span
-            className="font-serif text-lg font-semibold tracking-wide text-foreground/70"
+            className="font-serif text-sm font-semibold tracking-wide text-foreground/70 whitespace-nowrap md:text-lg"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
           >
             {copy.storiesNavLink}
           </span>
-          <div className="h-5 w-px bg-border" />
+          <div className="h-5 w-px bg-border flex-shrink-0" />
           <Link
             href={`/${locale}/agents`}
-            className="font-serif text-lg font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70"
+            className="font-serif text-sm font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70 whitespace-nowrap md:text-lg"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
           >
             For Agents
           </Link>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
           <LanguageToggle locale={locale} />
           <ThemeToggle />
         </div>

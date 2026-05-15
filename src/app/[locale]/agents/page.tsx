@@ -84,11 +84,11 @@ export default async function AgentsPage({
       <MusicPlayer />
 
       {/* ── Header ── */}
-      <header className="sticky top-0 z-50 flex items-center justify-between gap-4 border-b border-border/50 bg-background/70 px-6 py-4 backdrop-blur-md md:px-10 lg:px-14">
-        <div className="flex items-center gap-6">
+      <header className="sticky top-0 z-50 flex items-center justify-between gap-2 border-b border-border/50 bg-background/70 px-4 py-4 backdrop-blur-md md:gap-4 md:px-10 lg:px-14">
+        <div className="flex items-center gap-3 md:gap-6 overflow-x-auto">
           <Link
             href={`/${locale}`}
-            className="font-serif text-xl font-semibold tracking-wide text-foreground/90 transition hover:text-foreground"
+            className="font-serif text-lg font-semibold tracking-wide text-foreground/90 transition hover:text-foreground whitespace-nowrap md:text-xl"
             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
           >
             {dict.brand}
@@ -96,25 +96,25 @@ export default async function AgentsPage({
           <nav className="flex items-center gap-1 text-sm">
             <Link
               href={`/${locale}`}
-              className="rounded-full px-4 py-1.5 text-muted-foreground transition-all hover:text-foreground"
+              className="rounded-full px-3 py-1.5 text-muted-foreground transition-all hover:text-foreground whitespace-nowrap md:px-4"
             >
               {copy.navWall}
             </Link>
             <Link
               href={`/${locale}/stories`}
-              className="rounded-full px-4 py-1.5 text-muted-foreground transition-all hover:text-foreground"
+              className="rounded-full px-3 py-1.5 text-muted-foreground transition-all hover:text-foreground whitespace-nowrap md:px-4"
             >
               Stories
             </Link>
             <Link
               href={`/${locale}/agents`}
-              className="rounded-full bg-foreground px-4 py-1.5 text-background"
+              className="rounded-full bg-foreground px-3 py-1.5 text-background whitespace-nowrap md:px-4"
             >
               {copy.navAgents}
             </Link>
           </nav>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
           <LanguageToggle locale={locale} />
           <ThemeToggle />
         </div>
