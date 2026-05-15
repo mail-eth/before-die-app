@@ -4,6 +4,7 @@ import { Globe2, Terminal, Download, BookOpen } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { MusicPlayer } from "@/components/music-player";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { BottomNav } from "@/components/bottom-nav";
 import { dictionaries, isLocale } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
@@ -85,7 +86,7 @@ export default async function AgentsPage({
 
       {/* ── Header ── */}
       <header className="sticky top-0 z-50 flex items-center justify-between gap-2 border-b border-border/50 bg-background/70 px-4 py-4 backdrop-blur-md md:gap-4 md:px-10 lg:px-14">
-        <div className="flex items-center gap-3 md:gap-6 overflow-x-auto">
+        <div className="flex items-center gap-3 md:gap-6">
           <Link
             href={`/${locale}`}
             className="font-serif text-lg font-semibold tracking-wide text-foreground/90 transition hover:text-foreground whitespace-nowrap md:text-xl"
@@ -93,22 +94,23 @@ export default async function AgentsPage({
           >
             {dict.brand}
           </Link>
-          <nav className="flex items-center gap-1 text-sm">
+          {/* Desktop Navigation - Hidden on mobile */}
+          <nav className="hidden md:flex items-center gap-1 text-sm">
             <Link
               href={`/${locale}`}
-              className="rounded-full px-3 py-1.5 text-muted-foreground transition-all hover:text-foreground whitespace-nowrap md:px-4"
+              className="rounded-full px-4 py-1.5 text-muted-foreground transition-all hover:text-foreground whitespace-nowrap"
             >
               {copy.navWall}
             </Link>
             <Link
               href={`/${locale}/stories`}
-              className="rounded-full px-3 py-1.5 text-muted-foreground transition-all hover:text-foreground whitespace-nowrap md:px-4"
+              className="rounded-full px-4 py-1.5 text-muted-foreground transition-all hover:text-foreground whitespace-nowrap"
             >
               Stories
             </Link>
             <Link
               href={`/${locale}/agents`}
-              className="rounded-full bg-foreground px-3 py-1.5 text-background whitespace-nowrap md:px-4"
+              className="rounded-full bg-foreground px-4 py-1.5 text-background whitespace-nowrap"
             >
               {copy.navAgents}
             </Link>
@@ -250,7 +252,7 @@ export default async function AgentsPage({
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-border/40 px-4 py-12 text-center md:px-10 lg:px-14">
+      <footer className="border-t border-border/40 px-4 py-12 pb-20 md:pb-12 text-center md:px-10 lg:px-14">
         <p
           className="mx-auto max-w-2xl text-sm leading-relaxed italic text-muted-foreground/70"
           style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
@@ -264,6 +266,9 @@ export default async function AgentsPage({
           <span>Before Die</span>
         </div>
       </footer>
+
+      {/* ── Bottom Navigation (Mobile Only) ── */}
+      <BottomNav locale={locale} />
     </main>
   );
 }

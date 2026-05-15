@@ -6,6 +6,7 @@ import { MusicPlayer } from "@/components/music-player";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { StoryCard } from "@/components/story-card";
 import { StorySubmitForm } from "@/components/story-submit-form";
+import { BottomNav } from "@/components/bottom-nav";
 import { dictionaries, isLocale, type Story } from "@/lib/content";
 import { relativeTime } from "@/lib/utils";
 
@@ -59,7 +60,7 @@ export default async function StoriesPage({
 
       {/* ── Header ── */}
       <header className="sticky top-0 z-50 flex items-center justify-between gap-2 border-b border-border/50 bg-background/70 px-4 py-4 backdrop-blur-md md:gap-4 md:px-10 lg:px-14">
-        <div className="flex items-center gap-2 overflow-x-auto md:gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <Link
             href={`/${locale}`}
             className="font-serif text-lg font-semibold tracking-wide text-foreground/90 transition hover:text-foreground whitespace-nowrap md:text-xl"
@@ -67,29 +68,32 @@ export default async function StoriesPage({
           >
             {copy.brand}
           </Link>
-          <div className="h-5 w-px bg-border flex-shrink-0" />
-          <Link
-            href={`/${locale}`}
-            className="font-serif text-sm font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70 whitespace-nowrap md:text-lg"
-            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-          >
-            Wall
-          </Link>
-          <div className="h-5 w-px bg-border flex-shrink-0" />
-          <span
-            className="font-serif text-sm font-semibold tracking-wide text-foreground/70 whitespace-nowrap md:text-lg"
-            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-          >
-            {copy.storiesNavLink}
-          </span>
-          <div className="h-5 w-px bg-border flex-shrink-0" />
-          <Link
-            href={`/${locale}/agents`}
-            className="font-serif text-sm font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70 whitespace-nowrap md:text-lg"
-            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-          >
-            For Agents
-          </Link>
+          {/* Desktop Navigation - Hidden on mobile */}
+          <div className="hidden md:flex items-center gap-2">
+            <div className="h-5 w-px bg-border flex-shrink-0" />
+            <Link
+              href={`/${locale}`}
+              className="font-serif text-lg font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70 whitespace-nowrap"
+              style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+            >
+              Wall
+            </Link>
+            <div className="h-5 w-px bg-border flex-shrink-0" />
+            <span
+              className="font-serif text-lg font-semibold tracking-wide text-foreground/70 whitespace-nowrap"
+              style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+            >
+              {copy.storiesNavLink}
+            </span>
+            <div className="h-5 w-px bg-border flex-shrink-0" />
+            <Link
+              href={`/${locale}/agents`}
+              className="font-serif text-lg font-semibold tracking-wide text-muted-foreground/50 transition hover:text-foreground/70 whitespace-nowrap"
+              style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+            >
+              For Agents
+            </Link>
+          </div>
         </div>
         <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
           <LanguageToggle locale={locale} />
@@ -189,7 +193,7 @@ export default async function StoriesPage({
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-border/40 px-4 py-12 text-center md:px-10 lg:px-14">
+      <footer className="border-t border-border/40 px-4 py-12 pb-20 md:pb-12 text-center md:px-10 lg:px-14">
         <p
           className="mx-auto max-w-2xl text-sm leading-relaxed italic text-muted-foreground/70"
           style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
@@ -203,6 +207,9 @@ export default async function StoriesPage({
           <span>Before Die</span>
         </div>
       </footer>
+
+      {/* ── Bottom Navigation (Mobile Only) ── */}
+      <BottomNav locale={locale} />
     </main>
   );
 }
